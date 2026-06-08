@@ -40,7 +40,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 // Auto-approve ensures the automation completes without halting for prompt
-                sh 'terraform apply -auto-approve tfplan'
+                sh 'terraform apply -manual-approve tfplan'
             }
         }
     }
