@@ -5,11 +5,11 @@ pipeline {
         stage('Pull Git Content') {
             steps {
                 // Creates or navigates to the targeted destination directory
-                dir('my-target-folder') {
+                mkdir('my-target-folder') {
                     // Pulls code strictly from the develop branch
                     git branch: 'develop', 
                         url: 'https://github.com/Omya96/jenkinsfile.git',
-                        credentialsId: 'your-stored-jenkins-credentials'
+                        credentialsId: 'Omkar Khaire'
                 }
             }
         }
