@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    // Ensure your Jenkins environment has the appropriate cloud credentials configured
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    }
+
+    triggers {
+        // Allows GitHub webhooks to trigger this specific pipeline
+        githubPush()
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                sh 'terraform validate'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                // Auto-approve ensures the automation completes without halting for prompt
+                sh 'terraform apply -auto-approve tfplan'
+            }
+        }
+    }
+}
